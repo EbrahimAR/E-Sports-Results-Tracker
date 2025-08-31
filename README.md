@@ -64,3 +64,17 @@ This app supports **Admin & User roles**, team/game management, and match result
 ✅ Voice commands for user interaction
 
 ✅ AI-generated performance insights
+
+---
+
+## 👨‍💻 Author
+Ebrahim Abdul Raoof
+
+[LinkedIn](https://www.linkedin.com/in/ebrahim-ar/)
+
+[GitHub](https://github.com/EbrahimAR)
+
+---
+
+## 📜 License
+This project is licensed under the MIT License. See [LICENSE](https://github.com/EbrahimAR/E-Sports-Results-Tracker/blob/main/LICENSE) for details.
