@@ -35,6 +35,9 @@ This app supports **Admin & User roles**, team/game management, and match result
     │── matches.csv # Match history
     │── teams.csv # List of teams
     │── esports_tracker.py # Main application
+    ├── README.md # Project documentation
+    ├── LICENSE
+    └── .gitignore
 
 ---
 
