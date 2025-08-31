@@ -53,6 +53,45 @@ This app supports **Admin & User roles**, team/game management, and match result
 
 ---
 
+## ▶ Usage
+### **Launching the App**
+
+  - Run the script:
+
+    python esports_tracker.py
+
+User Mode
+
+Choose User Mode from the main menu.
+
+View:
+
+Recent Matches (last 5 recorded)
+
+Overall Team Scores
+
+Scores for a Specific Game
+
+Admin Mode
+
+Choose Admin Mode from the main menu.
+
+Log in with existing credentials or register as a new admin (requires an admin PIN).
+
+Perform actions:
+
+View/Add/Remove Teams
+
+View/Add/Remove Games
+
+Record Match Outcomes
+
+View All Matches
+
+Admin PIN for Registration
+
+Default PIN: 230306 (You can modify it in the code).
+
 ## 🔮 Future Improvements
 - AI-based match outcome prediction
 
