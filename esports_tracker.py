@@ -4,64 +4,103 @@ import pandas as pd
 import csv
 import os
 
-# Define file paths for storing data
+# --------------------------------------------------------
+# E-Sports Results Tracker (GUI-based Application)
+# --------------------------------------------------------
+# Features:
+# ✅ User Mode: View recent matches, team scores, and game-specific scores.
+# ✅ Admin Mode: Manage teams, games, match records, and credentials.
+# ✅ Stores all data in CSV files with proper headers.
+# ✅ Provides a clean Tkinter interface for navigation and data display.
+# --------------------------------------------------------
+
+# -----------------------------
+# Define file paths for storage
+# -----------------------------
 matches_file = 'matches.csv'
 teams_file = 'teams.csv'
 games_file = 'games.csv'
 credentials_file = 'credentials.csv'
 
+# ----------------------------------------------------
 # Create and validate CSV files with specified headers
+# ----------------------------------------------------
 def create_file(file, header):
+    """
+    Create a CSV file with the given header if it doesn't exist or is empty.
+    If the file exists but has a different header, overwrite it with the correct header.
+    """
     if not os.path.exists(file) or os.stat(file).st_size == 0:
-        f = open(file, 'w', newline='')
-        writer = csv.writer(f)
-        writer.writerow(header)
-        f.close()
+        # Create new file with header
+        with open(file, 'w', newline='') as f:
+            writer = csv.writer(f)
+            writer.writerow(header)
     else:
+        # Validate header and rewrite if incorrect
         with open(file, 'r') as f:
             existing_header = f.readline().strip().split(',')
         if existing_header != header:
-            f = open(file, 'w', newline='')
-            writer = csv.writer(f)
-            writer.writerow(header)
-            f.close()
+            with open(file, 'w', newline='') as f:
+                writer = csv.writer(f)
+                writer.writerow(header)
 
-# Initialize the required files
+# ✅ Initialize the required files
 create_file(matches_file, ['Date', 'Team A', 'Team B', 'Game Title', 'Winning Team'])
 create_file(teams_file, ['Teams'])
 create_file(games_file, ['Games'])
 create_file(credentials_file, ['Username', 'Password'])
 
+# ----------------------------
 # Save data to CSV files
+# ----------------------------
 def save_csv(data, file):
+    """
+    Save a pandas DataFrame to a CSV file.
+    """
     try:
         data.to_csv(file, index=False)
     except OSError as e:
         print(f"Error saving to file {file}: {e}")
 
-# Load data from CSV files with optional column validation
+# ----------------------------
+# Load data from CSV files
+# ----------------------------
 def load_csv(file, required_columns=None):
+    """
+    Load data from a CSV file into a pandas DataFrame.
+    If the file is empty or missing columns, return an empty DataFrame with required columns.
+    """
     try:
         df = pd.read_csv(file)
         if required_columns:
             for col in required_columns:
                 if col not in df.columns:
-                    df[col] = []  # Add missing column
+                    df[col] = []  # Add missing columns
         return df
     except pd.errors.EmptyDataError:
         return pd.DataFrame(columns=required_columns if required_columns else [])
 
-# Define the main application class
+# --------------------------------------------------------
+# Main Application Class for E-Sports Results Tracker
+# --------------------------------------------------------
 class EsportsApp(tk.Tk):
     def __init__(self):
+        """
+        Initialize the Tkinter window and display the main menu.
+        """
         super().__init__()
         self.title("E-Sports Results Tracker")
         self.geometry("800x600")
-        self.current_mode = None  # Track user/admin mode
+        self.current_mode = None  # Track whether in user or admin mode
         self.main_menu()
 
+    # ---------------------------------
     # Display the main menu
+    # ---------------------------------
     def main_menu(self):
+        """
+        Show the main menu with options for User Mode and Admin Mode.
+        """
         self.geometry("800x600")
         for widget in self.winfo_children():
             widget.destroy()
@@ -70,8 +109,13 @@ class EsportsApp(tk.Tk):
         ttk.Button(self, text="User Mode", command=self.user_menu).pack(pady=10)
         ttk.Button(self, text="Admin Mode", command=self.admin_login).pack(pady=10)
 
-    # Display user-specific options
+    # ---------------------------------
+    # User Mode Menu
+    # ---------------------------------
     def user_menu(self):
+        """
+        Display the user options menu.
+        """
         self.geometry("800x600")
         self.current_mode = "user"
         for widget in self.winfo_children():
@@ -83,8 +127,14 @@ class EsportsApp(tk.Tk):
         ttk.Button(self, text="Overall Team Scores", command=self.show_team_scores).pack(pady=10)
         ttk.Button(self, text="Scores for Specific Game", command=self.show_game_scores).pack(pady=10)
 
-    # Authenticate admin credentials
+    # ---------------------------------
+    # Admin Authentication
+    # ---------------------------------
     def admin_login(self):
+        """
+        Prompt for admin credentials and verify them.
+        If invalid, allow registration as a new admin.
+        """
         username = simpledialog.askstring("Admin Login", "Enter username:", parent=self)
         password = simpledialog.askstring("Admin Login", "Enter password:", show='*', parent=self)
 
@@ -98,10 +148,15 @@ class EsportsApp(tk.Tk):
             if choice:
                 self.register_admin()
 
-    # Register a new admin account
+    # ---------------------------------
+    # Register a New Admin
+    # ---------------------------------
     def register_admin(self):
+        """
+        Register a new admin using a security pin.
+        """
         pin = simpledialog.askstring("Admin Registration", "Enter the admin pin:", show='*', parent=self)
-        if pin == "230306":
+        if pin == "230306":  # Hardcoded admin pin
             username = simpledialog.askstring("Admin Registration", "Enter a new username:", parent=self)
             password = simpledialog.askstring("Admin Registration", "Enter a new password:", show='*', parent=self)
             credentials = load_csv(credentials_file, required_columns=['Username', 'Password'])
@@ -116,8 +171,13 @@ class EsportsApp(tk.Tk):
         else:
             messagebox.showerror("Error", "Incorrect pin. Access denied.")
 
-    # Display admin-specific options
+    # ---------------------------------
+    # Admin Menu
+    # ---------------------------------
     def admin_menu(self):
+        """
+        Display admin options such as team/game management and match recording.
+        """
         self.geometry("800x600")
         self.current_mode = "admin"
         for widget in self.winfo_children():
@@ -134,20 +194,29 @@ class EsportsApp(tk.Tk):
         ttk.Button(self, text="Record Match Outcome", command=self.record_match).pack(pady=10)
         ttk.Button(self, text="View All Matches", command=self.view_matches).pack(pady=10)
 
-    # Display the most recent matches
+    # ---------------------------------
+    # User Features
+    # ---------------------------------
     def show_recent_matches(self):
+        """
+        Display the 5 most recent matches.
+        """
         matches = load_csv(matches_file)
         self.display_table(matches.tail(5), title="Recent Matches")
 
-    # Calculate and display team scores
     def show_team_scores(self):
+        """
+        Show overall team win counts.
+        """
         matches = load_csv(matches_file)
         scores = matches['Winning Team'].value_counts().reset_index()
         scores.columns = ['Team', 'Wins']
         self.display_table(scores, title="Team Scores")
 
-    # Display scores for a specific game
     def show_game_scores(self):
+        """
+        Show team scores for a specific game.
+        """
         game = simpledialog.askstring("Input", "Enter game title:", parent=self)
         matches = load_csv(matches_file)
         game_scores = matches[matches['Game Title'] == game]['Winning Team'].value_counts().reset_index()
@@ -158,13 +227,17 @@ class EsportsApp(tk.Tk):
         else:
             self.display_table(game_scores, title=f"Scores for {game}")
 
-    # Display all registered teams
+    # ---------------------------------
+    # Admin Team Management
+    # ---------------------------------
     def view_teams(self):
         teams = load_csv(teams_file, required_columns=['Teams'])
         self.display_table(teams, title="Teams")
 
-    # Add or remove a team
     def modify_team(self, action):
+        """
+        Add or remove a team.
+        """
         team = simpledialog.askstring("Input", f"Enter team name to {action}:", parent=self)
         if team:
             teams = load_csv(teams_file, required_columns=['Teams'])
@@ -184,13 +257,17 @@ class EsportsApp(tk.Tk):
                     save_csv(teams, teams_file)
                     messagebox.showinfo("Info", "Team removed successfully.")
 
-    # Display all registered games
+    # ---------------------------------
+    # Admin Game Management
+    # ---------------------------------
     def view_games(self):
         games = load_csv(games_file, required_columns=['Games'])
         self.display_table(games, title="Games")
 
-    # Add or remove a game
     def modify_game(self, action):
+        """
+        Add or remove a game.
+        """
         game = simpledialog.askstring("Input", f"Enter game title to {action}:", parent=self)
         if game:
             games = load_csv(games_file, required_columns=['Games'])
@@ -210,8 +287,13 @@ class EsportsApp(tk.Tk):
                     save_csv(games, games_file)
                     messagebox.showinfo("Info", "Game removed successfully.")
 
-    # Record match details
+    # ---------------------------------
+    # Match Recording
+    # ---------------------------------
     def record_match(self):
+        """
+        Record a new match result with date, teams, game title, and winner.
+        """
         date = simpledialog.askstring("Input", "Enter the date (DD-MM-YYYY):", parent=self)
         teams = load_csv(teams_file, required_columns=['Teams'])
         games = load_csv(games_file, required_columns=['Games'])
@@ -240,13 +322,20 @@ class EsportsApp(tk.Tk):
         save_csv(matches, matches_file)
         messagebox.showinfo("Success", "Match recorded successfully.")
 
-    # Display all match records
+    # ---------------------------------
+    # View All Matches
+    # ---------------------------------
     def view_matches(self):
         matches = load_csv(matches_file, required_columns=['Date', 'Team A', 'Team B', 'Game Title', 'Winning Team'])
         self.display_table(matches, title="All Matches")
 
-    # Display a table in the GUI
+    # ---------------------------------
+    # Table Display Utility
+    # ---------------------------------
     def display_table(self, data, title):
+        """
+        Display a pandas DataFrame in a Tkinter Treeview widget.
+        """
         self.geometry("800x600")
         for widget in self.winfo_children():
             widget.destroy()
@@ -257,6 +346,7 @@ class EsportsApp(tk.Tk):
         columns = list(data.columns)
         tree = ttk.Treeview(frame, columns=columns, show='headings', height=15)
 
+        # Configure columns and alternating row colors
         for col in columns:
             tree.heading(col, text=col)
             tree.column(col, width=120, anchor=tk.CENTER)
@@ -270,11 +360,13 @@ class EsportsApp(tk.Tk):
 
         tree.pack(fill=tk.BOTH, expand=True)
 
+        # Back button based on current mode
         if self.current_mode == "user":
             ttk.Button(self, text="Back", command=self.user_menu).pack(pady=10)
         elif self.current_mode == "admin":
             ttk.Button(self, text="Back", command=self.admin_menu).pack(pady=10)
 
+# ✅ Entry point
 if __name__ == "__main__":
     app = EsportsApp()
     app.mainloop()
