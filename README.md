@@ -57,9 +57,9 @@ This app supports **Admin & User roles**, team/game management, and match result
 ### **Launching the App**
 
   - Run the script:
-
+    ```bash
     python esports_tracker.py
-
+    ```
 User Mode
 
 Choose User Mode from the main menu.
