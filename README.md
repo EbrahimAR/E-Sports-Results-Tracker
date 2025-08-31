@@ -54,6 +54,7 @@ This app supports **Admin & User roles**, team/game management, and match result
 ---
 
 ## ▶ Usage
+
 ### **Launching the App**
 
   - Run the script:
@@ -93,7 +94,10 @@ This app supports **Admin & User roles**, team/game management, and match result
 
   - Default PIN: `230306` (You can modify it in the code).
 
+---
+
 ## 🔮 Future Improvements
+
 - AI-based match outcome prediction
 
 - Natural language queries (NLP)
@@ -105,6 +109,7 @@ This app supports **Admin & User roles**, team/game management, and match result
 ---
 
 ## 👨‍💻 Author
+
 Ebrahim Abdul Raoof
 
 [LinkedIn](https://www.linkedin.com/in/ebrahim-ar/)
@@ -114,4 +119,5 @@ Ebrahim Abdul Raoof
 ---
 
 ## 📜 License
+
 This project is licensed under the MIT License. See [LICENSE](https://github.com/EbrahimAR/E-Sports-Results-Tracker/blob/main/LICENSE) for details.
