@@ -54,13 +54,13 @@ This app supports **Admin & User roles**, team/game management, and match result
 ---
 
 ## 🔮 Future Improvements
-✅ AI-based match outcome prediction
+- AI-based match outcome prediction
 
-✅ Natural language queries (NLP)
+- Natural language queries (NLP)
 
-✅ Voice commands for user interaction
+- Voice commands for user interaction
 
-✅ AI-generated performance insights
+- AI-generated performance insights
 
 ---
 
