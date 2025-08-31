@@ -45,11 +45,13 @@ This app supports **Admin & User roles**, team/game management, and match result
    cd esports-results-tracker
    ```
 
-### Install dependencie
+### 2. **Install dependencies**
     pip install pandas
 
-### Run the app
+### 3. **Run the app**
     python esports_tracker.py
+
+---
 
 ## 🔮 Future Improvements
 ✅ AI-based match outcome prediction
